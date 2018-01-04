@@ -12,12 +12,9 @@ object KnotHashSolver {
   }
 
   implicit class ExtendedArr[T:ClassTag](val arr: Array[T]) { // I guess you need reflection to input generic arrays in Scala?
-    def swap(idx1: Int, idx2: Int): Array[T] = arr.updated(idx1, arr(idx2)).updated(idx2, arr(idx1))
-  }
-
-  def checkKnottyList(circle: Array[Int], lengths: Array[Int]): Int = {
-    val knotted = singleRoundHash(circle, lengths, 0, 0)._1
-    knotted(0) * knotted(1)
+    /* NOTE: Replaced functional swap with imperative swap. Drastic performance improvement for day14. */
+    //def swap(idx1: Int, idx2: Int): Array[T] = arr.updated(idx1, arr(idx2)).updated(idx2, arr(idx1))
+    def swap(idx1: Int, idx2: Int): Array[T] = { val temp = arr(idx1); arr(idx1) = arr(idx2); arr(idx2) = temp; arr }
   }
 
   def singleRoundHash(circle: Array[Int], lengths: Array[Int], start: Int, skip: Int): (Array[Int], Int, Int) = {
@@ -47,7 +44,12 @@ object KnotHashSolver {
     knot(circle, lengths, start, skip)
   }
 
-  def getHash(circle: Array[Int], input: String): String = {
+  def checkKnottyList(lengths: Array[Int], circle: Array[Int]=(0 to 255).toArray): Int = {
+    val knotted = singleRoundHash(circle, lengths, 0, 0)._1
+    knotted(0) * knotted(1)
+  }
+
+  def getKnotHash(input: String, circle: Array[Int]=(0 to 255).toArray): String = {
     val lengths = input.toArray.map(_.toInt) ++ Array(17, 31, 73, 47, 23)
 
     def hash(circle: Array[Int], lengths: Array[Int], count: Int, start: Int, skip: Int): String = {
