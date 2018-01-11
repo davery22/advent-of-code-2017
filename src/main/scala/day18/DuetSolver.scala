@@ -52,7 +52,7 @@ object DuetSolver {
     execTilRecovery(instructions.map(parseInstruction), Map().withDefaultValue(0), 0).get
   }
 
-  /* Not my favorite solution, but would you believe I got it first try? I wonder how much bulk it would take to do this (concurrency) proper, but still functional style... */
+  /* Not my favorite solution, but would you believe I got it first try? I wonder how much setup it would take to do this (concurrency) proper, but still functional style... */
   def getProg1SendCount(instructions: List[String]): Int = {
     def dualExec(program: List[Instruction], pidA: Int, registers: List[Map[String, Long]], pc: List[Int], buf: List[List[Long]], p1Sends: Int): Int = {
       val pidB = 1-pidA // Assumption: pids are 0,1
